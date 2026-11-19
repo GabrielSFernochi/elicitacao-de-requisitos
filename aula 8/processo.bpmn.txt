@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_Entrega" targetNamespace="http://bpmn.io/schema/bpmn" exporter="bpmn-js (https://demo.bpmn.io)" exporterVersion="18.33.0">
+  <bpmn:process id="Process_Entrega" name="Processo de entrega de pedidos" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_1">
+      <bpmn:lane id="Lane_Entregador" name="Entregador">
+        <bpmn:flowNodeRef>Task_Coletar</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_Rota</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Atualizar</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_Juntar</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Entregar</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_Almoxarife" name="Almoxarife">
+        <bpmn:flowNodeRef>Task_Notificacao</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Separar</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Verificar</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Embalar</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_Cliente" name="Cliente">
+        <bpmn:flowNodeRef>StartEvent_1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Pedido</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="StartEvent_1" name="Início" />
+    <bpmn:task id="Task_Pedido" name="Pedido é efetuado" />
+    <bpmn:task id="Task_Notificacao" name="Notificação enviada para loja" />
+    <bpmn:task id="Task_Separar" name="Pedido é separado" />
+    <bpmn:task id="Task_Verificar" name="Verificar destinatário e tipo de entrega" />
+    <bpmn:task id="Task_Embalar" name="Empacotar pedido de acordo com a fragilidade" />
+    <bpmn:task id="Task_Coletar" name="Pedido coletado pelo entregador" />
+    <bpmn:exclusiveGateway id="Gateway_Rota" name="É viável atualizar rota em tempo real?" gatewayDirection="Diverging" />
+    <bpmn:task id="Task_Atualizar" name="Atualizar rota" />
+    <bpmn:exclusiveGateway id="Gateway_Juntar" gatewayDirection="Converging" />
+    <bpmn:task id="Task_Entregar" name="Pedido entregue" />
+    <bpmn:endEvent id="EndEvent_1" name="Fim" />
+    <bpmn:sequenceFlow id="Flow_1" sourceRef="StartEvent_1" targetRef="Task_Pedido" />
+    <bpmn:sequenceFlow id="Flow_2" sourceRef="Task_Pedido" targetRef="Task_Notificacao" />
+    <bpmn:sequenceFlow id="Flow_3" sourceRef="Task_Notificacao" targetRef="Task_Separar" />
+    <bpmn:sequenceFlow id="Flow_4" sourceRef="Task_Separar" targetRef="Task_Verificar" />
+    <bpmn:sequenceFlow id="Flow_5" sourceRef="Task_Verificar" targetRef="Task_Embalar" />
+    <bpmn:sequenceFlow id="Flow_6" sourceRef="Task_Embalar" targetRef="Task_Coletar" />
+    <bpmn:sequenceFlow id="Flow_7" sourceRef="Task_Coletar" targetRef="Gateway_Rota" />
+    <bpmn:sequenceFlow id="Flow_8" name="Sim" sourceRef="Gateway_Rota" targetRef="Task_Atualizar" />
+    <bpmn:sequenceFlow id="Flow_9" name="Não" sourceRef="Gateway_Rota" targetRef="Gateway_Juntar" />
+    <bpmn:sequenceFlow id="Flow_10" sourceRef="Task_Atualizar" targetRef="Gateway_Juntar" />
+    <bpmn:sequenceFlow id="Flow_11" sourceRef="Gateway_Juntar" targetRef="Task_Entregar" />
+    <bpmn:sequenceFlow id="Flow_12" sourceRef="Task_Entregar" targetRef="EndEvent_1" />
+  </bpmn:process>
+  <bpmn:collaboration id="Collaboration_1">
+    <bpmn:participant id="Participant_1" name="Processo de entrega" processRef="Process_Entrega" />
+  </bpmn:collaboration>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1">
+      <bpmndi:BPMNShape id="Participant_1_di" bpmnElement="Participant_1" isHorizontal="true">
+        <dc:Bounds x="150" y="80" width="1750" height="600" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Entregador_di" bpmnElement="Lane_Entregador" isHorizontal="true">
+        <dc:Bounds x="180" y="480" width="1720" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Almoxarife_di" bpmnElement="Lane_Almoxarife" isHorizontal="true">
+        <dc:Bounds x="180" y="280" width="1720" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Cliente_di" bpmnElement="Lane_Cliente" isHorizontal="true">
+        <dc:Bounds x="180" y="80" width="1720" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="StartEvent_1">
+        <dc:Bounds x="220" y="162" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="225" y="198" width="27" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Pedido_di" bpmnElement="Task_Pedido">
+        <dc:Bounds x="300" y="140" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Notificacao_di" bpmnElement="Task_Notificacao">
+        <dc:Bounds x="480" y="340" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Separar_di" bpmnElement="Task_Separar">
+        <dc:Bounds x="670" y="340" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Verificar_di" bpmnElement="Task_Verificar">
+        <dc:Bounds x="840" y="340" width="150" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Embalar_di" bpmnElement="Task_Embalar">
+        <dc:Bounds x="1040" y="340" width="160" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Coletar_di" bpmnElement="Task_Coletar">
+        <dc:Bounds x="1240" y="540" width="150" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_Rota_di" bpmnElement="Gateway_Rota" isMarkerVisible="true">
+        <dc:Bounds x="1440" y="555" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1423" y="605" width="84" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Atualizar_di" bpmnElement="Task_Atualizar">
+        <dc:Bounds x="1550" y="500" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_Juntar_di" bpmnElement="Gateway_Juntar" isMarkerVisible="true">
+        <dc:Bounds x="1710" y="555" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Entregar_di" bpmnElement="Task_Entregar">
+        <dc:Bounds x="1780" y="540" width="110" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_1_di" bpmnElement="EndEvent_1">
+        <dc:Bounds x="1890" y="562" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1899" y="598" width="19" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1_di" bpmnElement="Flow_1">
+        <di:waypoint x="256" y="180" />
+        <di:waypoint x="300" y="180" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_2_di" bpmnElement="Flow_2">
+        <di:waypoint x="420" y="180" />
+        <di:waypoint x="450" y="180" />
+        <di:waypoint x="450" y="380" />
+        <di:waypoint x="480" y="380" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_3_di" bpmnElement="Flow_3">
+        <di:waypoint x="620" y="380" />
+        <di:waypoint x="670" y="380" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_4_di" bpmnElement="Flow_4">
+        <di:waypoint x="790" y="380" />
+        <di:waypoint x="840" y="380" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_5_di" bpmnElement="Flow_5">
+        <di:waypoint x="990" y="380" />
+        <di:waypoint x="1040" y="380" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_6_di" bpmnElement="Flow_6">
+        <di:waypoint x="1200" y="380" />
+        <di:waypoint x="1220" y="380" />
+        <di:waypoint x="1220" y="580" />
+        <di:waypoint x="1240" y="580" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_7_di" bpmnElement="Flow_7">
+        <di:waypoint x="1390" y="580" />
+        <di:waypoint x="1440" y="580" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_8_di" bpmnElement="Flow_8">
+        <di:waypoint x="1465" y="555" />
+        <di:waypoint x="1465" y="540" />
+        <di:waypoint x="1550" y="540" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1480" y="515" width="25" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_9_di" bpmnElement="Flow_9">
+        <di:waypoint x="1490" y="580" />
+        <di:waypoint x="1710" y="580" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1580" y="585" width="25" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_10_di" bpmnElement="Flow_10">
+        <di:waypoint x="1680" y="540" />
+        <di:waypoint x="1735" y="540" />
+        <di:waypoint x="1735" y="555" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_11_di" bpmnElement="Flow_11">
+        <di:waypoint x="1760" y="580" />
+        <di:waypoint x="1780" y="580" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_12_di" bpmnElement="Flow_12">
+        <di:waypoint x="1890" y="580" />
+        <di:waypoint x="1890" y="580" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
